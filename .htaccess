@@ -1,0 +1,3 @@
+# Lindungi folder internal bila diakses langsung dari browser
+RedirectMatch 403 ^/.*/(config|includes|database|pages|_test)/.*$
+Options -Indexes

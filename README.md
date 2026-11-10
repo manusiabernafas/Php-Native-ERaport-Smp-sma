@@ -1,0 +1,99 @@
+# Aplikasi e-Rapor Kurikulum Merdeka (PHP Native + MySQL)
+
+Aplikasi e-Rapor Kurikulum Merdeka berbasis PHP Native dan MySQL untuk SD, SMP, SMA, maupun SMK. Guru mengisi nilai per Tujuan Pembelajaran (TP) dan Sumatif Akhir Semester (SAS), lalu sistem menghitung nilai akhir dan menyusun deskripsi capaian kompetensi secara otomatis. Wali kelas melengkapi kehadiran, catatan, ekstrakurikuler, dan kenaikan kelas, kemudian mencetak rapor A4 untuk satu siswa atau satu kelas sekaligus.
+
+Ada empat peran: Operator/Admin, Kepala Sekolah, Guru, dan Wali Kelas (guru yang ditunjuk sebagai wali). Operator mengatur siswa (bisa impor dari Excel/CSV), rombongan belajar, pembagian guru tiap mapel, periode semester, kunci nilai, dan kapan rapor dibagikan ke siswa. Kodenya ditulis tanpa framework sehingga mudah dipelajari untuk tugas kuliah atau skripsi, dan cukup lengkap untuk dipakai sekolah sungguhan. Tampilannya bergaya lembar nilai kertas milimeter dengan tabel yang padat dan nyaman untuk input nilai berjam-jam.
+
+## Cara kerja
+
+Setiap mapel di setiap kelas (pembelajaran) punya daftar Tujuan Pembelajaran yang ditulis guru sendiri. Guru mengisi nilai tiap TP sebagai sumatif lingkup materi dan nilai SAS di lembar nilai bergaya spreadsheet: navigasi panah atas/bawah dan Enter, nilai akhir terhitung langsung saat mengetik, dan nilai di bawah KKTP ditandai merah. Nilai akhir = bobot% rata-rata TP + sisanya dari SAS (bobot diatur operator, bawaan 50:50). Bila ada satu isian yang salah, tidak ada yang disimpan sehingga data tetap konsisten. Nilai juga bisa diunduh dan diimpor kembali lewat CSV yang dibuka di Excel.
+
+Deskripsi capaian kompetensi disusun otomatis dari nilai TP: dua TP terbaik yang mencapai KKTP masuk kalimat "Menunjukkan penguasaan yang baik dalam ...", dan TP di bawah KKTP masuk kalimat "Perlu bantuan dalam ...". KKTP bisa diatur per sekolah atau per mapel, dan guru tetap bisa menulis deskripsi manual untuk siswa tertentu. Mapel agama dipisahkan per agama, jadi siswa beragama Kristen otomatis mendapat Pendidikan Agama Kristen, bukan PAI.
+
+Wali kelas mengisi sakit, izin, tanpa keterangan, catatan, nilai ekstrakurikuler, dan di semester genap keputusan naik kelas atau kelulusan. Leger menampilkan nilai akhir seluruh mapel per siswa lengkap dengan jumlah, rata-rata, dan peringkat, bisa diunduh ke Excel. Rapor dicetak dalam format A4 berisi identitas, nilai dan capaian kompetensi, ekstrakurikuler, ketidakhadiran, catatan, serta tanda tangan orang tua, wali kelas, dan kepala sekolah, dengan halaman identitas peserta didik opsional.
+
+Operator memantau progres pengisian nilai per mapel dan per guru, mengunci nilai menjelang pembagian rapor, lalu membagikan rapor ke portal siswa. Siswa dan orang tua cukup memasukkan NISN dan tanggal lahir untuk melihat rapornya sendiri. Saat pindah ke semester genap, rombel, anggota, wali kelas, dan pembagian guru bisa disalin sekali klik.
+
+## Fitur
+
+- Login 4 peran: Operator/Admin, Kepala Sekolah, Guru, dan Wali Kelas dengan menu berbeda
+- Dashboard kesiapan rapor per kelas, progres nilai per mapel & guru, daftar mapel yang belum lengkap
+- Tujuan Pembelajaran (TP) per mapel per kelas, kode TP otomatis
+- Lembar input nilai ala spreadsheet: navigasi panah/Enter, nilai akhir langsung terhitung, nilai di bawah KKTP berwarna merah
+- Nilai akhir = bobot rata-rata TP + SAS (bobot bisa diatur, bawaan 50:50)
+- Deskripsi capaian kompetensi otomatis dari nilai TP (penguasaan baik & perlu bantuan), bisa diganti manual
+- KKTP per sekolah dan per mapel
+- Unduh & impor nilai lewat CSV/Excel, dicocokkan dengan NIS, baris salah membatalkan impor
+- Mapel agama per agama: siswa hanya mendapat mapel agama sesuai agamanya
+- Kelompok mapel umum & muatan lokal
+- Wali kelas: ketidakhadiran (sakit, izin, tanpa keterangan), catatan wali kelas, isi cepat kolom
+- Nilai ekstrakurikuler per kegiatan dengan predikat & keterangan
+- Keputusan naik kelas / tinggal kelas / lulus di semester genap
+- Leger nilai per kelas dengan jumlah, rata-rata, dan peringkat, unduh CSV
+- Cetak rapor A4 per siswa atau satu kelas sekaligus, plus halaman identitas peserta didik
+- Kunci nilai: guru & wali kelas tidak bisa mengubah lagi, operator tetap bisa mengoreksi
+- Bagikan rapor: siswa & orang tua melihat rapor dengan NISN + tanggal lahir
+- Data siswa lengkap dengan impor CSV (siswa lama diperbarui, bukan digandakan) langsung ke rombel
+- Rombongan belajar: anggota, pindah kelas, wali kelas, pembagian guru tiap mapel
+- Periode tahun ajaran & semester, salin rombel ke semester berikutnya sekali klik
+- Pengaturan identitas sekolah, kepala sekolah & NIP, tempat & tanggal rapor
+- Keamanan: PDO prepared statement, password_hash, CSRF, batas percobaan login, hak akses per guru & per kelas, transaksi database
+- Data contoh SMP: 168 siswa, 6 rombel, 13 mapel, 14 guru, 312 TP, 9.800+ nilai
+- Tampilan lembar nilai kertas milimeter, responsif, ikon lokal (bisa offline)
+- Tanpa framework dan tanpa Composer, cukup XAMPP
+
+## Instalasi
+
+**Kebutuhan:** PHP 8.0 atau lebih baru dan MySQL/MariaDB. Paling mudah pakai XAMPP atau Laragon.
+
+1. Ekstrak file ZIP lalu pindahkan folder `e-rapor` ke folder web server:
+   - XAMPP: `C:\xampp\htdocs\e-rapor`
+   - Laragon: `C:\laragon\www\e-rapor`
+
+2. Jalankan **Apache** dan **MySQL**.
+
+3. Buka `http://localhost/phpmyadmin`, klik **Import**, pilih file `database/e_rapor.sql`, lalu klik **Import**. Database `e_rapor` beserta data contohnya akan dibuat otomatis.
+
+   Atau lewat terminal:
+   ```bash
+   mysql -u root -p < database/e_rapor.sql
+   ```
+
+4. Jika user/password MySQL kamu bukan bawaan XAMPP, sesuaikan `config/database.php`:
+   ```php
+   return [
+       'host'     => 'localhost',
+       'port'     => 3306,
+       'database' => 'e_rapor',
+       'username' => 'root',
+       'password' => '',
+   ];
+   ```
+
+5. Buka `http://localhost/e-rapor` dan masuk dengan akun demo:
+   - Operator: `admin` / `admin123`
+   - Kepala sekolah: `kepsek` / `guru123`
+   - Guru Matematika & wali kelas IX A: `budi` / `guru123`
+   - Guru Bahasa Indonesia & wali kelas VII A: `rina` / `guru123`
+
+6. Di menu **Pengaturan**, ubah identitas sekolah, kepala sekolah, KKTP, dan bobot nilai. Lalu atur siswa (bisa impor CSV), rombel, dan pembagian guru, dan ganti kata sandi akun demo.
+
+7. Untuk melihat portal siswa: klik **Bagikan rapor** di Pengaturan, lalu buka `http://localhost/e-rapor/index.php?page=cek` dan masukkan NISN `0131234567` dengan tanggal lahir `17-03-2013`.
+
+**Tanpa XAMPP?** Dari dalam folder project jalankan `php -S localhost:8000` lalu buka `http://localhost:8000`.
+
+## Struktur folder
+
+```
+e-rapor/
+├── index.php              # router: index.php?page=...
+├── config/database.php    # koneksi MySQL
+├── database/e_rapor.sql   # skema + data contoh
+├── includes/bootstrap.php # helper, keamanan, hak akses, perhitungan nilai akhir & deskripsi capaian
+├── pages/nilai/           # TP, lembar nilai, impor/ekspor CSV (guru)
+├── pages/wali/            # kehadiran, catatan, ekstrakurikuler, kenaikan (wali kelas)
+├── pages/rapor.php        # cetak rapor A4 (juga dipakai portal siswa)
+├── pages/leger.php        # leger nilai + peringkat
+├── pages/siswa/, rombel/  # data siswa, impor CSV, rombel & pembagian guru (operator)
+└── assets/                # CSS & JS
+```
